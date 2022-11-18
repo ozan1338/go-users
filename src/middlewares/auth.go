@@ -1,6 +1,8 @@
 package middlewares
 
 import (
+	"go-users/src/database"
+	"go-users/src/models"
 	"strconv"
 	"time"
 
@@ -29,7 +31,25 @@ func IsAuthenticated(c *fiber.Ctx) error {
 		})
 	}
 
-	// payload := token.Claims.(*ClaimsWithScope)
+	payload := token.Claims.(*ClaimsWithScope)
+
+	id, err := strconv.Atoi(payload.Subject)
+
+	if err != nil {
+		return err
+	}
+
+	var userToken models.UserToken
+
+	database.DB.Where("user_id = ? and token = ? and expired_at >= now()", id, token.Raw).Last(&userToken)
+
+	if userToken.Id == 0 {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthorized",
+		})
+	}
+
 	// isAmbassador := strings.Contains(c.Path(), "/api/ambassador")
 
 	// if (payload.Scope == "admin" && isAmbassador) || (payload.Scope == "ambassador" && !isAmbassador) {
