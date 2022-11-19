@@ -164,3 +164,11 @@ func UpdatePassword(c *fiber.Ctx) error {
 
 	return c.JSON(user)
 }
+
+func Users(c *fiber.Ctx) error {
+	var users []models.User
+
+	database.DB.Find(&users)
+
+	return c.JSON(users)
+}
