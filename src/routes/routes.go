@@ -8,6 +8,9 @@ import (
 )
 
 func Setup(app *fiber.App) {
+	app.Get("/", func (ctx *fiber.Ctx) error {
+		return ctx.JSON("ok")
+	})
 	api := app.Group("api")
 	api.Post("register", controllers.Register)
 	api.Post("login", controllers.Login)

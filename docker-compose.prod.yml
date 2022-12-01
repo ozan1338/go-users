@@ -1,0 +1,15 @@
+version: '3'
+services:
+  users_backend:
+    build: 
+      context: .
+      dockerfile: prod.dockerfile
+    image: ozan/users:0.0.2
+    ports:
+      - 8001:8000
+    environment:
+      DB_HOST: 35.222.78.188
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_DATABASE: users
